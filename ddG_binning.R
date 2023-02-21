@@ -31,6 +31,7 @@ AminL = full_join(ddg_eq02,ddg_dvn1, by = c("Pos", "AA", "Mut")) %>%
 AminL_cut = AminL %>% mutate(bin = cut(AmL, breaks = nbins-1))
 AminL_table = table(AminL_cut$bin) %>% as.data.frame() %>% 
   mutate(fraction = Freq/sum(Freq))
+write_tsv(AminL_table,"AminL_all.xls")
 plot(AminL_table)
 
 #Latent-Active ddG
@@ -38,4 +39,14 @@ LminA = AminL %>% rename(LmA = AmL) %>% mutate(LmA = ddG.y-ddG.x)
 LminA_cut = LminA %>% mutate(bin = cut(LmA, breaks = nbins-1))
 LminA_table = table(LminA_cut$bin) %>% as.data.frame() %>% 
   mutate(fraction = Freq/sum(Freq))
+write_tsv(LminA_table,"LminA_all.xls")
 plot(LminA_table)
+
+# Active plus Latent ddG
+AplusL = full_join(ddg_eq02,ddg_dvn1, by = c("Pos", "AA", "Mut")) %>% 
+  na.omit() %>% mutate(ApL = ddG.x + ddG.y)
+AplusL_cut = AplusL %>% mutate(bin = cut(ApL, breaks = nbins-1))
+AplusL_table = table(AplusL_cut$bin) %>% as.data.frame() %>% 
+  mutate(fraction = Freq/sum(Freq))
+write_tsv(AplusL_table,"AplusL_all.xls")
+plot(AplusL_table)
